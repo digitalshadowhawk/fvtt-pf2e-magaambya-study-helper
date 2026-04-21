@@ -1,4 +1,4 @@
-import { Branches, Skills } from "../data/branches";
+import { Branches, Skills, Slugs } from "../data/branches";
 import { dcByLevel } from "../utils/dcByLevel";
 import { SKILL_DICTIONARY_REVERSE } from "../data/branches";
 import { slugify } from "../utils/slugify";
@@ -24,11 +24,21 @@ export function levelingDialog(branch: Branches, currentLevel: number, actor: an
     .join();
 
   const content = `<form>
-        <div class="form-group">
-            <label>Skill:</label>
-            <select name="skill-selector">${options}</select>
-        </div>
-    </form>`;
+    <div class="form-group">
+      <label>Skill:</label>
+      <select name="skill-selector">${options}</select>
+    </div>
+    <div class="form-group">
+      <label>Is Cram?</label>
+      <input name="isCram" type="checkbox">
+    </div>
+    ${branch === Branches.RainScribes
+    ? `<div class="form-group">
+      <label>Is Haibram's Advantage?</label>
+      <input name="isFriendHaibram" type="checkbox">
+    </div>`
+    : ''}
+  </form>`;
   const dc = dcByLevel.get(currentLevel);
   
   new DialogV2({
@@ -44,9 +54,23 @@ export function levelingDialog(branch: Branches, currentLevel: number, actor: an
     callback: (_event: Event, button: HTMLButtonElement) => {
       const skill = (button.form!.elements.namedItem("skill-selector") as HTMLSelectElement).value;
       const slugSkill = slugify(skill);
-      actor.skills[slugSkill].check.roll({
-        dc: { value: dc, adjustments: [] },
-      });
+      const isCram = (button.form!.elements.namedItem("isCram") as HTMLInputElement)?.checked ?? false;
+      const isFriendHaibram = (button.form!.elements.namedItem("isFriendHaibram") as HTMLInputElement)?.checked ?? false;
+      const amount = 1 + Number(isCram) + Number(isCram && isFriendHaibram);
+
+      const rollOptions = new Set(["action:study", Slugs[branch]]);
+      if (isCram) rollOptions.add("action:cram");
+
+      for (let i = 0; i < amount; i++) {
+        actor.skills[slugSkill].check.roll({
+          extraRollOptions: rollOptions,
+          dc: {
+            label: `${isCram ? 'Cram' : 'Study'} at ${branch}: ${skill} DC`,
+            value: dc,
+            adjustments: [],
+          },
+        });
+      }
     },
   },
   {

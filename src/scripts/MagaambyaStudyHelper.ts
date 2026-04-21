@@ -1,6 +1,7 @@
 import { levelingDialog } from "./LevelingDialog";
 import { BranchOverviewForm } from "./BranchOverviewForm";
 import { MAGAAMBYA_ID, MAGAAMBYA_FLAGS } from "./constants";
+import { Branches } from "../data/branches";
 
 declare const game: Game;
 
@@ -20,38 +21,33 @@ export class MagaambyaStudyHelper {
   }
 
   static initialize() {
-    Hooks.on("renderCharacterSheetPF2e" as any, (app: any, html: any) => {
-  const actor = app.object;
+    Hooks.on('getActorSheetHeaderButtons' as any, (sheet: any, buttons: any[]) => {
+      buttons.unshift({
+        label: 'Magaambya Helper',
+        class: 'popout',
+        icon: 'fas fa-book',
+        onclick: async () => {
+          new BranchOverviewForm(sheet.actor).render({ force: true });
+        },
+      });
+      return buttons;
+    });
 
-  // handle both jQuery and plain HTMLElement
-  const element: HTMLElement = html instanceof HTMLElement ? html : html[0];
+    Hooks.on("renderBranchOverviewForm" as any, (app: BranchOverviewForm, html: any) => {
+      const element: HTMLElement = html instanceof HTMLElement ? html : html[0];
 
-  const header = element.querySelector(".window-header .window-title");
-  if (!header) return;
-
-  const button = document.createElement("a");
-  button.className = "popout";
-  button.innerHTML = `<i class="fas fa-book"></i>Magaambya Helper`;
-  button.addEventListener("click", () => {
-    new BranchOverviewForm(actor).render({ force: true });
-  });
-
-  header.after(button);
-});
-
-    Hooks.on("renderBranchOverviewForm" as any, (app: any, html: HTMLElement) => {
-      const actor = app.actor;
-      const { firstBranchLevel, secondBranchLevel, firstBranch, secondBranch } =
-        actor.getFlag(MAGAAMBYA_ID, MAGAAMBYA_FLAGS.BRANCHDATA);
-
-      const button = html.querySelector<HTMLButtonElement>("#firstBranchButton");
+      const button = element.querySelector<HTMLButtonElement>("#firstBranchButton");
       button?.addEventListener("click", () => {
-        levelingDialog(firstBranch, firstBranchLevel, actor);
+        const branch = (element.querySelector<HTMLSelectElement>("[name=firstBranch]"))!.value as Branches;
+        const level = Number((element.querySelector<HTMLInputElement>("[name=firstBranchLevel]"))!.value);
+        levelingDialog(branch, level, app.actor);
       });
 
-      const secondButton = html.querySelector<HTMLButtonElement>("#secondBranchButton");
+      const secondButton = element.querySelector<HTMLButtonElement>("#secondBranchButton");
       secondButton?.addEventListener("click", () => {
-        levelingDialog(secondBranch, secondBranchLevel, actor);
+        const branch = (element.querySelector<HTMLSelectElement>("[name=secondBranch]"))!.value as Branches;
+        const level = Number((element.querySelector<HTMLInputElement>("[name=secondBranchLevel]"))!.value);
+        levelingDialog(branch, level, app.actor);
       });
     });
   }
