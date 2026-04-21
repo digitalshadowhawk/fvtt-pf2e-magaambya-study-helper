@@ -8,7 +8,7 @@ const [outDir] = (() => {
     buildMode === "production"
       ? path.join(__dirname, "dist/")
       : path.join(
-          "/home/ubuntu/foundrydata11/Data/modules/magaambya-study-helper"
+          "C:/Users/Zach/Desktop/Foundry13-Portable/Data/modules/magaambya-study-helper"
         );
   return [outDir];
 })();
@@ -30,6 +30,9 @@ module.exports = {
   // file resolutions
   resolve: {
     extensions: [".ts", ".js"],
+    alias: {
+      "@lib": path.resolve(__dirname, "./src/scripts/lib/*")
+    },
   },
   devtool: isProductionBuild ? undefined : "inline-source-map",
   watch: !isProductionBuild,

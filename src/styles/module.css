@@ -1,0 +1,11 @@
+.dialog button[data-action="roll"]::before {
+  font-family: "Pathfinder2eActions";
+  content: "A";
+  margin-right: 4px;
+}
+
+.dialog button[data-action="cancel"]::before {
+  font-family: "Pathfinder2eActions";
+  content: "R";
+  margin-right: 4px;
+}
