@@ -1,4 +1,4 @@
-<form class="flexcol">
+<div class="flexcol">
   <div class="form-group">
     <div class="row" style="display: flex">
       <div class="column" style="flex: 40%">
@@ -10,7 +10,7 @@
           <option value="{{this}}">{{this}}</option>
           {{/ifNotEquals}} {{/each}}</select
         ><br />
-        <label for="firstBranchLevel">1st Branch Level</label><br />
+        <label for="firstBranchLevel">First Branch Level</label><br />
         <input
           type="number"
           name="firstBranchLevel"
@@ -74,4 +74,4 @@
   <footer class="sheet-footer flexrow">
     <button type="submit" name="submit"><i class="fa fa-check"></i> OK</button>
   </footer>
-</form>
+</div>

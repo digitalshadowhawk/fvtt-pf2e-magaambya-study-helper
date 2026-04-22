@@ -3,11 +3,11 @@
   "title": "Magaambya Study Helper",
   "description": "Helps manage the day-to-day studying at the Magaambya.",
   "version": "This is auto replaced",
-  "library": "false",
+  "library": false,
   "manifestPlusVersion": "1.0.0",
   "compatibility":{
-    "minimum": "11",
-    "verified": "11.302"
+    "minimum": "13",
+    "verified": "13.351"
   },
   "authors": [
     {
@@ -19,11 +19,11 @@
   "conflicts": [
     
   ],
-  "esmodules": [
-    "/scripts/main.js"
+  "scripts": [
+    "scripts/main.js"
   ],
   "styles": [
-    "/styles/module.css"
+    "styles/module.css"
   ],
   "languages": [
     {
@@ -37,7 +37,8 @@
       "id": "pf2e",
       "type": "system",
       "compatibility": {
-        "minimum": "4.0.0"
+        "minimum": "7.0.0",
+        "verified": "7.12.2"
       }
     }]
   },

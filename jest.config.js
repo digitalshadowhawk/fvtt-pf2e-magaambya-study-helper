@@ -1,5 +1,6 @@
 const { pathsToModuleNameMapper } = require("ts-jest/");
 const { compilerOptions } = require("./tsconfig");
+
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
@@ -14,6 +15,7 @@ module.exports = {
   },
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
+    ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
   },
   setupFilesAfterEnv: ["<rootDir>/tests/setup.ts"],
   transformIgnorePatterns: [],

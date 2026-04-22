@@ -3,18 +3,17 @@
     "outDir": "/home/ubuntu/foundrydata10/Data/modules/magaambya-study-helper/",
     "rootDir": "src",
     "allowJs": true,
-    "target": "ES2018",
+    "target": "esnext",
     "esModuleInterop": true,
     "sourceMap": true,
     "noImplicitReturns": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "baseUrl": ".",
-    "types": ["@league-of-foundry-developers/foundry-vtt-types", "jest"],
+    "types": ["fvtt-types", "jest"],
     "paths": {
-      "@lib/*": ["src/scripts/lib/*"]
+      "@lib/*": ["./src/scripts/lib/*"]
     },
-    "typeRoots": ["node_modules/@types", "node_modules/handlebars"]
+    "strict": true
   },
   "include": ["./src/**/*", "./src/**/*.json", "./src/**/*.css"],
   "ts-node": {
