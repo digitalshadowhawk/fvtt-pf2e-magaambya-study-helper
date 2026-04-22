@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - run: npm install
       - run: npm ci
 
       # Substitute the Manifest and Download URLs in the module.json
