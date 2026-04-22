@@ -8,12 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      # get part of the tag after the `v`
-      - name: Extract tag version number
-        id: get_version
-        uses: battila7/get-version-action@v2
+      - uses: actions/checkout@v6
+      - run: npm ci
 
       # Substitute the Manifest and Download URLs in the module.json
       - name: Substitute Manifest and Download Links For Versioned Ones
@@ -22,15 +18,15 @@ jobs:
         with:
           files: "src/module.json"
         env:
-          version: ${{steps.get_version.outputs.version-without-v}}
+          version: ${{github.event.release.tag_name}}
           url: https://github.com/${{github.repository}}
           manifest: https://github.com/${{github.repository}}/releases/latest/download/module.json
           download: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/module.zip
 
-      - name: Use Node.js 14
-        uses: actions/setup-node@v3
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
 
       # Build
       - name: Build with webpack
@@ -49,8 +45,8 @@ jobs:
         with:
           allowUpdates: true # Set this to false if you want to prevent updating existing releases
           name: ${{ github.event.release.name }}
-          draft: ${{ github.event.release.unpublished }}
-          prerelease: ${{ github.event.release.prerelease }}
+          draft: false
+          prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "./dist/module.json, ./module.zip"
           tag: ${{ github.event.release.tag_name }}
